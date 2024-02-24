@@ -3,3 +3,79 @@ hellow welcome
 rtbdfszbrdfcxzbrvxsaz
 
 gvdhcjkxzmnb cnm
+
+
+<div class="product__item__text">
+                                                <h5>
+                                                    <%=products[i].name%>
+                                                </h5>
+                                                <form id="addToCartForm_<%=products[i]._id%>" action="/addcart/<%=products[i]._id%>" method="post">
+                                                    <input type="hidden" name="price" id="offerPrice-<%=products[i]._id%>" value="">
+                                                    <button class="add-cart" type="button" onclick="addToCart('<%=products[i]._id%>')" style="background-color: #2c5c22; color: #fff;  border: none; border-radius: 5px; cursor: pointer;">+ Add To Cart</button>
+                                                    
+                                                </form>
+                                                <% if (products[i].offer) { %>
+
+                                                    <% const discountedPrice = products[i].price - (products[i].price * (products[i].offer.percentage / 100)); %>
+                                                    <h5 class="offer-price">₹ <%= Math.floor(discountedPrice) %></h5>
+                                                   
+                                                    <input type="hidden" id="newprice-<%= products[i]._id %>" value="<%= Math.floor(discountedPrice) %>">
+
+                                                    <span class="original-price">₹ <%= products[i].price %></span>
+                                                    <button class="discount"> <%= products[i].offer.percentage %>% off</button>
+                                                <% } else if (products[i].category.offer) { %>
+                                                    <%
+                                                    let maxPercentag = 0;
+                                                    let maximumOffer = null;
+                                                
+                                                    offerdata.forEach((data) => {
+                                                        if (data._id.toString() === products[i].category.offer.toString() && data.percentage > maxPercentag) {
+                                                            maxPercentag = data.percentage;
+                                                            maximumOffer = data;
+                                                        }
+                                                    });
+                                                
+                                                    if (maximumOffer) {
+                                                %>
+                                                <% const discountedPrice = products[i].price - (products[i].price * (maximumOffer.percentage / 100)); %>
+                                                    <h5 class="offer-price">₹ <%= Math.floor(discountedPrice) %></h5>
+                                                    <input type="hidden" id="newprice-<%= products[i]._id %>" value="<%= Math.floor(discountedPrice) %>">
+                                                <%
+                                                    }
+                                                %>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    <span class="original-price">₹ <%= products[i].price %></span>
+
+
+                                                    <%
+                                                    let maxPercentage = 0;
+                                                    let maxOffer = null;
+                                                
+                                                    offerdata.forEach((datas) => {
+                                                        if (datas._id.toString() === products[i].category.offer.toString() && datas.percentage > maxPercentage) {
+                                                            maxPercentage = datas.percentage;
+                                                            maxOffer = datas;
+                                                        }
+                                                    });
+                                                
+                                                    if (maxOffer) {
+                                                %>
+                                                    <button class="discount"> <%= maxOffer.percentage %>% off</button>
+                                                <%
+                                                    }
+                                                %>
+
+
+                                                <% } else { %>
+                                                    <h5 class="offer-price">₹ <%= products[i].price %></h5>
+                                                    <span class="original-price"></span>
+                                                    <button class="discount"> 0% off</button>
+                                                    <input type="hidden" id="newprice-<%= products[i]._id %>" value="<%= products[i].price %>">
+
+                                                <% } %>  
+
+                                                
+
